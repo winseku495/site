@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Decryptor</title>
+    <script>
+        // カエサル暗号で復号する関数
+        function caesarDecipher(text, shift) {
+            return text.split('').map(char => {
+                if (char.match(/[a-z]/)) {
+                    return String.fromCharCode(((char.charCodeAt(0) - 97 - shift + 26) % 26) + 97);
+                } else if (char.match(/[A-Z]/)) {
+                    return String.fromCharCode(((char.charCodeAt(0) - 65 - shift + 26) % 26) + 65);
+                } else {
+                    return char;
+                }
+            }).join('');
+        }
+
+        // 共通鍵復号 (簡易XOR復号)
+        function simpleXORDecipher(text, key) {
+            const keyLength = key.length;
+            return text.split('').map((char, index) => {
+                return String.fromCharCode(char.charCodeAt(0) ^ key.charCodeAt(index % keyLength));
+            }).join('');
+        }
+
+        function decryptText() {
+            const encryptedText = document.getElementById('encryptedText').value;
+            const caesarShift = 3; // カエサル暗号のシフト値
+            const commonKey = "flanremiriarumia495"; // 共通鍵
+
+            // 共通鍵復号化
+            const xorDecrypted = simpleXORDecipher(encryptedText, commonKey);
+
+            // カエサル復号化
+            const finalDecrypted = caesarDecipher(xorDecrypted, caesarShift);
+
+            // 結果を表示
+            document.getElementById('outputText').textContent = finalDecrypted;
+        }
+    </script>
+</head>
+<body>
+    <h1>Text Decryptor</h1>
+    <label for="encryptedText">Enter encrypted text:</label>
+    <input type="text" id="encryptedText">
+    <button onclick="decryptText()">Decrypt</button>
+    <h2>Decrypted Output:</h2>
+    <p id="outputText"></p>
+</body>
+</html>
