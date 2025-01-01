@@ -3,51 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Text Encryptor</title>
+    <title>Advanced Encoding</title>
     <script>
-        // カエサル暗号で暗号化する関数
-        function caesarCipher(text, shift) {
-            return text.split('').map(char => {
-                if (char.match(/[a-z]/)) {
-                    return String.fromCharCode(((char.charCodeAt(0) - 97 + shift) % 26) + 97);
-                } else if (char.match(/[A-Z]/)) {
-                    return String.fromCharCode(((char.charCodeAt(0) - 65 + shift) % 26) + 65);
-                } else {
-                    return char;
-                }
+        // 入力文字列をバイナリに変換
+        function stringToBinary(input) {
+            return input.split('').map(char => {
+                return char.charCodeAt(0).toString(2).padStart(8, '0');
             }).join('');
         }
 
-        // 共通鍵暗号化 (簡易XOR暗号)
-        function simpleXORCipher(text, key) {
-            const keyLength = key.length;
-            return text.split('').map((char, index) => {
-                return String.fromCharCode(char.charCodeAt(0) ^ key.charCodeAt(index % keyLength));
+        // バイナリ文字列を十二進数に変換
+        function binaryToHex(binary) {
+            let hex = '';
+            for (let i = 0; i < binary.length; i += 4) {
+                const chunk = binary.slice(i, i + 4);
+                hex += parseInt(chunk, 2).toString(12);
+            }
+            return hex;
+        }
+
+        // 十二進数文字列をバイナリに変換
+        function hexToBinary(hex) {
+            return hex.split('').map(char => {
+                return parseInt(char, 12).toString(2).padStart(4, '0');
             }).join('');
         }
 
-        function encryptText() {
+        // バイナリを「ﾌﾗ」と「ﾌﾗﾝ」に置換
+        function binaryToFlan(binary) {
+            return binary.replace(/1/g, 'ﾌﾗ').replace(/0/g, 'ﾌﾗﾝ');
+        }
+
+        function encodeText() {
             const inputText = document.getElementById('inputText').value;
-            const caesarShift = 3; // カエサル暗号のシフト値
-            const commonKey = "flanremiriarumia495"; // 共通鍵
 
-            // カエサル暗号化
-            const caesarEncrypted = caesarCipher(inputText, caesarShift);
+            // ステップ1: 文字列をバイナリに変換
+            const binary = stringToBinary(inputText);
 
-            // 共通鍵暗号化
-            const finalEncrypted = simpleXORCipher(caesarEncrypted, commonKey);
+            // ステップ2: バイナリを十二進数に変換
+            const hex = binaryToHex(binary);
+
+            // ステップ3: 十二進数をバイナリに変換
+            const reconvertedBinary = hexToBinary(hex);
+
+            // ステップ4: バイナリを「ﾌﾗ」「ﾌﾗﾝ」に変換
+            const flanOutput = binaryToFlan(reconvertedBinary);
 
             // 結果を表示
-            document.getElementById('outputText').textContent = finalEncrypted;
+            document.getElementById('outputText').textContent = flanOutput;
         }
     </script>
 </head>
 <body>
-    <h1>Text Encryptor</h1>
-    <label for="inputText">Enter text to encrypt:</label>
+    <h1>Advanced Encoding</h1>
+    <label for="inputText">Enter text to encode:</label>
     <input type="text" id="inputText">
-    <button onclick="encryptText()">Encrypt</button>
-    <h2>Encrypted Output:</h2>
+    <button onclick="encodeText()">Encode</button>
+    <h2>Encoded Output:</h2>
     <p id="outputText"></p>
 </body>
 </html>
