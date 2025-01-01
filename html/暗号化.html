@@ -5,31 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Advanced Encoding</title>
     <script>
-        // 入力文字列をバイナリに変換
-        function stringToBinary(input) {
-            return input.split('').map(char => {
+        // テキストをバイナリに変換
+        function stringToBinary(text) {
+            return text.split('').map(char => {
                 return char.charCodeAt(0).toString(2).padStart(8, '0');
             }).join('');
         }
 
-        // バイナリ文字列を十二進数に変換
-        function binaryToHex(binary) {
-            let hex = '';
-            for (let i = 0; i < binary.length; i += 4) {
-                const chunk = binary.slice(i, i + 4);
-                hex += parseInt(chunk, 2).toString(12);
-            }
-            return hex;
-        }
-
-        // 十二進数文字列をバイナリに変換
-        function hexToBinary(hex) {
-            return hex.split('').map(char => {
-                return parseInt(char, 12).toString(2).padStart(4, '0');
-            }).join('');
-        }
-
-        // バイナリを「ﾌﾗ」と「ﾌﾗﾝ」に置換
+        // バイナリを「ﾌﾗ」と「ﾌﾗﾝ」に置き換え
         function binaryToFlan(binary) {
             return binary.replace(/1/g, 'ﾌﾗ').replace(/0/g, 'ﾌﾗﾝ');
         }
@@ -37,20 +20,14 @@
         function encodeText() {
             const inputText = document.getElementById('inputText').value;
 
-            // ステップ1: 文字列をバイナリに変換
+            // ステップ1: テキストをバイナリに変換
             const binary = stringToBinary(inputText);
 
-            // ステップ2: バイナリを十二進数に変換
-            const hex = binaryToHex(binary);
-
-            // ステップ3: 十二進数をバイナリに変換
-            const reconvertedBinary = hexToBinary(hex);
-
-            // ステップ4: バイナリを「ﾌﾗ」「ﾌﾗﾝ」に変換
-            const flanOutput = binaryToFlan(reconvertedBinary);
+            // ステップ2: バイナリを「ﾌﾗ」と「ﾌﾗﾝ」に変換
+            const flanText = binaryToFlan(binary);
 
             // 結果を表示
-            document.getElementById('outputText').textContent = flanOutput;
+            document.getElementById('outputText').textContent = flanText;
         }
     </script>
 </head>
