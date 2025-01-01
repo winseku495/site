@@ -10,23 +10,6 @@
             return flanText.replace(/ﾌﾗ/g, '1').replace(/ﾌﾗﾝ/g, '0');
         }
 
-        // バイナリ文字列を十二進数に変換
-        function binaryToHex(binary) {
-            let hex = '';
-            for (let i = 0; i < binary.length; i += 4) {
-                const chunk = binary.slice(i, i + 4);
-                hex += parseInt(chunk, 2).toString(12);
-            }
-            return hex;
-        }
-
-        // 十二進数文字列をバイナリに変換
-        function hexToBinary(hex) {
-            return hex.split('').map(char => {
-                return parseInt(char, 12).toString(2).padStart(4, '0');
-            }).join('');
-        }
-
         // バイナリ文字列を文字列に変換
         function binaryToString(binary) {
             let text = '';
@@ -43,14 +26,8 @@
             // ステップ1: 「ﾌﾗ」と「ﾌﾗﾝ」をバイナリに戻す
             const binary = flanToBinary(flanText);
 
-            // ステップ2: バイナリを十二進数に変換
-            const hex = binaryToHex(binary);
-
-            // ステップ3: 十二進数を再度バイナリに変換
-            const reconvertedBinary = hexToBinary(hex);
-
-            // ステップ4: バイナリを元の文字列に変換
-            const decodedText = binaryToString(reconvertedBinary);
+            // ステップ2: バイナリを元の文字列に変換
+            const decodedText = binaryToString(binary);
 
             // 結果を表示
             document.getElementById('outputText').textContent = decodedText;
